@@ -26,14 +26,129 @@ print("Welcome to the UW Calculator Playground")
 //: 
 //: For this latter set of operations, it is safe to assume that `["count"]` (with no additional arguments) is 0, `["avg"]` is also 0, and `["fact"]` is 0. `["1", "fact"]` should return 1, and `["0", "fact"]` should also return 1. (Yes, 0-factorial is 1. True story.)
 //: 
-func calculate(_ args: [String]) -> Int {
-    return -1
-}
-
 func calculate(_ arg: String) -> Int {
-    return -1
+    
+    var operation: String = ""
+    var tempNum : String = ""
+    var nums:[Int] = [];
+    var total = 0;
+    var argLength = arg.count
+    var curIndex = 0;
+    for c in arg {
+        curIndex+=1;
+        if (!c.isNumber && c != " ") {
+            operation.append(c);
+        }
+        else if c.isNumber{
+            tempNum.append(c);
+            // If we reach end of the string,AND the end of the string is a number, make sure to append the number
+            if(curIndex == argLength){
+                nums.append(Int(tempNum)!);
+                tempNum = "";
+            }
+        }
+        else if tempNum != ""{
+            nums.append(Int(tempNum)!);
+            tempNum = "";
+        }
+    }
+    switch operation {
+    case "+":
+        total = nums[0] + nums[1];
+    case "-":
+        total = nums[0] - nums[1];
+    case "/":
+        total = nums[0] / nums[1];
+    case "*":
+        total = nums[0] * nums[1];
+    case "%":
+        total = nums[0] % nums[1];
+    case "count":
+        total = nums.count;
+    case "avg":
+        total = nums.reduce(0, { x, y in
+            x + y
+        })
+        if(nums.count != 0){
+            total /= nums.count
+        }
+    case "fact":
+        if(nums.count == 0){
+            total = 0;
+        }
+        else {
+            total =  recursiveFac(num: nums[0])
+        }
+    default:
+        total = -1;
+    }
+    return total;
 }
 
+
+
+func calculate(_ args: [String]) -> Int {
+    var nums: [Int] = [];
+    var total:Int = 0;
+    var  operation:String = "";
+    for string in args {
+        if let num = Int(string){
+            nums.append(num);
+        }
+        else {
+            operation = string;
+        }
+    }
+        
+        //        if(string.count == 1){
+        //            let asChar = Character(string)
+        //            if(asChar.isNumber){
+        //                nums.append(Int(String(asChar))!)
+        //            }
+        //            else {
+        //                operation = string;
+        //            }
+        //        }
+        //    }
+        switch operation {
+        case "+":
+            total = nums[0] + nums[1];
+        case "-":
+            total = nums[0] - nums[1];
+        case "/":
+            total = nums[0] / nums[1];
+        case "*":
+        total = nums[0] * nums[1];
+        case "%":
+            total = nums[0] % nums[1];
+        case "count":
+            total = nums.count;
+        case "avg":
+            total = nums.reduce(0, { x, y in
+                x + y
+            })
+            if(nums.count != 0){
+                total /= nums.count
+            }
+        case "fact":
+            if(nums.count == 0){
+                total = 0;
+            }
+            else {
+                total =  recursiveFac(num: nums[0])
+            }
+        default:
+            total = -1;
+        }
+    return total
+    }
+
+func recursiveFac (num : Int) -> Int {
+    if(num == 0){
+        return 1;
+    }
+    return num * recursiveFac(num: num-1) ;
+}
 //: Below this are the test expressions/calls to verify if your code is correct.
 //:
 //: ***DO NOT MODIFY ANYTHING BELOW THIS***
